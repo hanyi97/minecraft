@@ -38,11 +38,15 @@ class BTCOActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             if(!isValid(GENESIS)) return@setOnClickListener
 
             launch {
+                val start = System.currentTimeMillis()
                 var hash: String
                 withContext(Dispatchers.Default) {
                     hash = mineGenesisBlockNative(difficulty.toInt())
                 }
+                val end = System.currentTimeMillis()
+                val time = end - start
                 binding.dataHashTextView.text = hash
+                binding.logTextView.text = "blockchain took ${time}ms to mine"
             }
         }
 
@@ -52,11 +56,16 @@ class BTCOActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
             logDifficultyMsgNative(difficulty, message)
             launch {
+                val start = System.currentTimeMillis()
                 var hash: String
                 withContext(Dispatchers.Default) {
                     hash = mineBlocksNative(blocks.toInt(), difficulty.toInt(), message)
                 }
+                val end = System.currentTimeMillis()
+                val time = end - start
+
                 binding.dataHashTextView.text = hash
+                binding.logTextView.text = "blockchain took ${time}ms to mine"
             }
         }
     }
