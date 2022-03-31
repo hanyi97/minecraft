@@ -2,6 +2,7 @@ package edu.singaporetech.btco
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -14,6 +15,11 @@ class BTCOActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private lateinit var binding:ActivityLayoutBinding
     private external fun logDifficultyMsgNative(difficulty: String, message: String)
     private external fun mineGenesisBlockNative(difficulty: String)
+    private external fun mineBlocksNative(blocks: Int, difficulty: Int, message: String)
+
+    private lateinit var difficulty: String
+    private lateinit var blocks: String
+    private lateinit var message: String
 
     /**
      * Init everything needed when created.
@@ -25,24 +31,32 @@ class BTCOActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         binding = ActivityLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         binding.genesisButton.setOnClickListener {
+            getInputs()
             if(!isValid(GENESIS)) return@setOnClickListener
-            mineGenesisBlockNative(binding.difficultyEditText.text.toString())
+            mineGenesisBlockNative(difficulty)
         }
 
         binding.chainButton.setOnClickListener {
+            getInputs()
             if(!isValid(CHAIN)) return@setOnClickListener
 
-            logDifficultyMsgNative(binding.difficultyEditText.text.toString(),
-                binding.msgEditText.text.toString())
+            logDifficultyMsgNative(difficulty, message)
+
+            mineBlocksNative(blocks.toInt(), difficulty.toInt(), message)
         }
+    }
+
+    private fun getInputs() {
+        blocks = binding.blocksEditText.text.toString()
+        difficulty = binding.difficultyEditText.text.toString()
+        message = binding.msgEditText.text.toString()
     }
 
     private fun isValid(button: String): Boolean {
         binding.logTextView.text = ""
-        val block = binding.blocksEditText.text
-        val difficulty = binding.difficultyEditText.text
-        val msg = binding.msgEditText.text
+
         var isValid = true
 
         when(button) {
@@ -59,7 +73,7 @@ class BTCOActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
             }
             CHAIN -> {
-                if (msg.isEmpty()) {
+                if (message.isEmpty()) {
                     binding.logTextView.append(getString(R.string.describe_your_transaction_in_words))
                     isValid = false
                 }
@@ -69,12 +83,12 @@ class BTCOActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     isValid = false
                 }
 
-                if (block.isEmpty()) {
+                if (blocks.isEmpty()) {
                     binding.logTextView.append("\n" + getString(R.string.blocks_cannot_be_empty))
                     isValid = false
                 }
 
-                if (!isWithinRange(block.toString(), 2, 888)) {
+                if (!isWithinRange(blocks, 2, 888)) {
                     binding.logTextView.append("\n" + getString(R.string.blocks_must_be_2_to_888))
                     isValid = false
                 }
