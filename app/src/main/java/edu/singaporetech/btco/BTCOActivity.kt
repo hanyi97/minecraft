@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import edu.singaporetech.btco.databinding.ActivityLayoutBinding
 import kotlinx.coroutines.*
 import java.util.*
@@ -14,8 +15,8 @@ import java.util.*
 class BTCOActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private lateinit var binding:ActivityLayoutBinding
     private external fun logDifficultyMsgNative(difficulty: String, message: String)
-    private external fun mineGenesisBlockNative(difficulty: String)
-    private external fun mineBlocksNative(blocks: Int, difficulty: Int, message: String)
+    private external fun mineGenesisBlockNative(difficulty: Int): String
+    private external fun mineBlocksNative(blocks: Int, difficulty: Int, message: String): String
 
     private lateinit var difficulty: String
     private lateinit var blocks: String
@@ -35,7 +36,14 @@ class BTCOActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         binding.genesisButton.setOnClickListener {
             getInputs()
             if(!isValid(GENESIS)) return@setOnClickListener
-            mineGenesisBlockNative(difficulty)
+
+            launch {
+                var hash: String
+                withContext(Dispatchers.Default) {
+                    hash = mineGenesisBlockNative(difficulty.toInt())
+                }
+                binding.dataHashTextView.text = hash
+            }
         }
 
         binding.chainButton.setOnClickListener {
@@ -43,8 +51,13 @@ class BTCOActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             if(!isValid(CHAIN)) return@setOnClickListener
 
             logDifficultyMsgNative(difficulty, message)
-
-            mineBlocksNative(blocks.toInt(), difficulty.toInt(), message)
+            launch {
+                var hash: String
+                withContext(Dispatchers.Default) {
+                    hash = mineBlocksNative(blocks.toInt(), difficulty.toInt(), message)
+                }
+                binding.dataHashTextView.text = hash
+            }
         }
     }
 
