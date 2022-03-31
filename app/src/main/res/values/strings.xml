@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">MineMine App</string>
+    <string name="words_of_wisdom">Not financial advice, ever. \n- your teacher</string>
+    <string name="no_of_blocks_to_mine">NO. OF BLOCKS TO MINE:</string>
+    <string name="_2_to_88">2 to 88...</string>
+    <string name="network_difficulty">NETWORK DIFFICULTY:</string>
+    <string name="_1_to_10">1 to 10...</string>
+    <string name="transaction_message">TRANSACTION MESSAGE:</string>
+    <string name="describe_your_transaction_in_words">describe your transaction in words...</string>
+    <string name="mine_genesis">MINE GENESIS</string>
+    <string name="mine_chain">MINE CHAIN</string>
+    <string name="data_hash">DATA HASH:</string>
+    <string name="hash_of_the_data_displayed_here">hash of the data displayed here...</string>
+    <string name="log">LOG:</string>
+    <string name="difficult_cannot_be_empty">difficulty cannot be empty...</string>
+    <string name="difficulty_must_be_1_to_10">difficulty must be 1 to 10...</string>
+    <string name="blocks_cannot_be_empty">blocks cannot be empty...</string>
+    <string name="blocks_must_be_2_to_888">blocks must be 2 to 888...</string>
+</resources>
