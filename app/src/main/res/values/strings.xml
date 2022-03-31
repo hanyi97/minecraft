@@ -16,4 +16,5 @@
     <string name="difficulty_must_be_1_to_10">difficulty must be 1 to 10...</string>
     <string name="blocks_cannot_be_empty">blocks cannot be empty...</string>
     <string name="blocks_must_be_2_to_888">blocks must be 2 to 888...</string>
+    <string name="time_taken_to_mine">blockchain took %1$sms to mine</string>
 </resources>
