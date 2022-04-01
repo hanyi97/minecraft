@@ -4,7 +4,7 @@
 #include "sha-256.h"
 #include "blockchain.h"
 
-#define TAG "BITCONATIVE"
+static const char* TAG = "BITCONATIVE";
 
 /**
  * @brief Log difficulty and message
@@ -40,6 +40,12 @@ Java_edu_singaporetech_btco_BTCOActivity_mineGenesisBlockNative(JNIEnv *env, job
 
     char hashStr[HASH_LEN * 2 + 1];
     makeCStringFromBytes(genesisBlock.dataHash, hashStr, HASH_LEN);
+
+    // [JUST IN CASE] Code to convert string to hash and print to android log
+    // uint8_t bytes[HASH_LEN * 2 + 1];
+    // makeBytesFromCString(hashStr, bytes, HASH_LEN * 2 + 1);
+    // logHash(bytes);
+
     return (*env)->NewStringUTF(env, hashStr);
 
 }
